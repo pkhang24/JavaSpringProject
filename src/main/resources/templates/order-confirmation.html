@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Order Confirmation', content=~{::main})}">
+    <main th:fragment="main">
+        <div class="container text-center">
+            <h2 class="mb-4">Order Confirmation</h2>
+            <p>Thank you for your purchase! Your order has been placed successfully.</p>
+            <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

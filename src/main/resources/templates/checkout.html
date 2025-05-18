@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Checkout', content=~{::main})}">
+    <main th:fragment="main">
+        <h2>Checkout</h2>
+        <div th:if="${cartItems == null or cartItems.isEmpty()}">
+            <p>Your cart is empty. Please add items to proceed with checkout.</p>
+            <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        <div th:unless="${cartItems == null or cartItems.isEmpty()}">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Shipping Information</h4>
+                    <form th:action="@{/checkout}" method="post">
+                        <div class="mb-3">
+                            <label for="shippingAddress" class="form-label">Shipping Address</label>
+                            <textarea id="shippingAddress" name="shippingAddress" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select id="paymentMethod" name="paymentMethod" class="form-select" required>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Place Order</button>
+                        <a th:href="@{/cart}" class="btn btn-secondary">Back to Cart</a>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4>Order Summary</h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${cartItems}">
+                            <td th:text="${item.product.title} ?: 'N/A'"></td>
+                            <td th:text="${item.quantity} ?: 0"></td>
+                            <td th:text="(${item.product.discountPrice} != null ? ${item.product.discountPrice} * ${item.quantity} : ${item.product.price} * ${item.quantity}) + 'VND'"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="2"><strong>Total</strong></td>
+                            <td><strong th:text="${#numbers.formatDecimal(total, 2, 'COMMA', 2, 'POINT')} + 'VND'"></strong></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

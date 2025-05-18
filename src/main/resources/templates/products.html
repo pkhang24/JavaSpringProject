@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Products', content=~{::main})}">
+    <main th:fragment="main">
+        <main class="inner-main">
+            <div class="container">
+                <!-- Tiêu đề -->
+                <h2 class="text-center mb-4">Products</h2>
+
+                <!-- Hiển thị từ khóa tìm kiếm (nếu có) -->
+                <div th:if="${query != null}" class="mb-3 text-center">
+                    <p>Search results for: <strong th:text="${query}"></strong></p>
+                </div>
+
+                <!-- Bộ lọc theo danh mục -->
+                <div class="mb-4 d-flex justify-content-center">
+                    <div class="input-group" style="max-width: 300px;">
+                        <label class="input-group-text" for="categoryFilter">Filter by Category:</label>
+                        <select id="categoryFilter" class="form-select" onchange="window.location.href='/products?categoryId='+this.value">
+                            <option value="">All Categories</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.categoryId}"
+                                    th:text="${category.categoryName}"
+                                    th:selected="${category.categoryId == param.categoryId}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Thông báo nếu không có sản phẩm -->
+                <div th:if="${products.isEmpty()}" class="alert alert-info text-center">
+                    No products found.
+                </div>
+
+                <!-- Danh sách sản phẩm -->
+                <div class="row">
+                    <div class="col-md-4" th:each="product : ${products}">
+                        <div class="card mb-4 shadow-sm">
+                            <img th:src="${product.coverImageUrl} ?: '/images/default.jpg'" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${product.title}"></h5>
+                                <p class="card-text text-muted" th:text="${product.author}"></p>
+                                <p class="card-text">
+                                    <span th:if="${product.discountPrice != null}" class="text-success" th:text="${product.discountPrice} + 'VND'"></span>
+                                    <span th:unless="${product.discountPrice != null}" th:text="'$' + ${product.price}"></span>
+                                    <span th:if="${product.discountPrice != null}" class="text-muted text-decoration-line-through ms-2" th:text="${product.price} + 'VND'"></span>
+                                </p>
+                                <a th:href="@{/products/{id}(id=${product.productId})}" class="btn btn-primary w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Product Details', content=~{::main})}">
+    <main th:fragment="main">
+        <div class="container">
+            <h2 th:text="${product.title}"></h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <img th:src="${product.coverImageUrl}" class="img-fluid" alt="Product Image" th:unless="${product.coverImageUrl == null}">
+                </div>
+                <div class="col-md-6">
+                    <h4>Product Information</h4>
+                    <p><strong>Author:</strong> <span th:text="${product.author}"></span></p>
+                    <p><strong>Publisher:</strong> <span th:text="${product.publisher}"></span></p>
+                    <p><strong>Category:</strong> <span th:text="${product.category.categoryName}"></span></p>
+                    <p><strong>Price:</strong>
+                        <span th:if="${product.discountPrice != null}" th:text="${product.discountPrice} + 'VND'"></span>
+                        <span th:unless="${product.discountPrice != null}" th:text="${product.price} + 'VND'"></span>
+                        <span th:if="${product.discountPrice != null}" class="text-muted text-decoration-line-through" th:text="${product.price} + 'VND'"></span>
+                    </p>
+                    <p><strong>Stock:</strong> <span th:text="${product.stockQuantity}"></span></p>
+                    <p><strong>ISBN:</strong> <span th:text="${product.isbn}"></span></p>
+                    <p><strong>Published Date:</strong> <span th:text="${product.publishedDate}"></span></p>
+                    <p><strong>Description:</strong></p>
+                    <p th:text="${product.description}"></p>
+                    <form th:action="@{/cart/add}" method="post" th:if="${product.stockQuantity > 0}">
+                        <input type="hidden" name="productId" th:value="${product.productId}">
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control w-25 d-inline-block" min="1" th:max="${product.stockQuantity}" value="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                    <p th:if="${product.stockQuantity == 0}" class="text-danger">Out of Stock</p>
+                    <a th:href="@{/products}" class="btn btn-secondary mt-2">Back to Products</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

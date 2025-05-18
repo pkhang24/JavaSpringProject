@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Manage Users', content=~{::main})}">
+    <main th:fragment="main">
+        <div class="container">
+            <h2 class="text-center mb-4">Manage Users</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role.roleName}"></td>
+                    <td th:text="${user.isActive} ? 'Active' : 'Inactive'"></td>
+                    <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td>
+                        <a th:href="@{'/admin/users/edit/' + ${user.userId}}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{'/admin/users/delete/' + ${user.userId}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

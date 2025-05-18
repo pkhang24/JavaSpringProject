@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Admin Dashboard', content=~{::main})}">
+    <main th:fragment="main">
+        <div class="container">
+            <h2 class="text-center mb-4">Admin Dashboard</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Products</h5>
+                            <p class="card-text">Add, edit, or delete products in the store.</p>
+                            <a th:href="@{/admin/products}" class="btn btn-primary">Go to Products</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Categories</h5>
+                            <p class="card-text">Create, update, or remove product categories.</p>
+                            <a th:href="@{/admin/categories}" class="btn btn-primary">Go to Categories</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Users</h5>
+                            <p class="card-text">View, edit, or delete user accounts.</p>
+                            <a th:href="@{/admin/users}" class="btn btn-primary">Go to Users</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

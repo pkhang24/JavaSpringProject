@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Home', content=~{::main})}">
+    <main th:fragment="main">
+        <main class="inner-main">
+            <!-- Nội dung sản phẩm -->
+            <div class="container">
+                <h2 class="text-center mb-4">Welcome to Comic Shop</h2>
+                <div class="row">
+                    <div class="col-md-4" th:each="product : ${products}">
+                        <div class="card mb-4">
+                            <img th:src="${product.coverImageUrl}" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${product.title}"></h5>
+                                <p class="card-text" th:text="${product.author}"></p>
+                                <p class="card-text" th:text="${product.price} + 'VND'"></p>
+                                <a th:href="@{'/products/' + ${product.productId}}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="/products" class="btn btn-primary">View All Products</a>
+                </div>
+            </div>
+        </main>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

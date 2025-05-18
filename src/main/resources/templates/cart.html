@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title='Shopping Cart', content=~{::main})}">
+    <main th:fragment="main">
+        <h2>Your Shopping Cart</h2>
+        <div th:if="${cartItems == null or cartItems.isEmpty()}">
+            <p>Your cart is empty.</p>
+            <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        <div th:unless="${cartItems == null or cartItems.isEmpty()}">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td>
+                        <a th:href="@{/products/{id}(id=${item.product.productId})}" th:text="${item.product.title} ?: 'N/A'"></a>
+                    </td>
+                    <td th:text="(${item.product.discountPrice} ?: ${item.product.price}) + 'VND'"></td>
+                    <td>
+                        <form th:action="@{/cart/update}" method="post">
+                            <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                            <input type="number" name="quantity" th:value="${item.quantity} ?: 1" min="1" class="form-control d-inline-block w-auto">
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="(${item.product.discountPrice} != null ? ${item.product.discountPrice} * ${item.quantity} : ${item.product.price} * ${item.quantity}) + 'VND'"></td>
+                    <td>
+                        <a th:href="@{/cart/remove/{id}(id=${item.cartItemId})}" class="btn btn-danger btn-sm">Remove</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-end">
+                <h4>Total: <span th:text="${#numbers.formatDecimal(total, 2, 'COMMA', 2, 'POINT')}  + 'VND'"></span></h4>
+                <a th:href="@{/checkout}" class="btn btn-success">Proceed to Checkout</a>
+                <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</div>
+</body>
+</html>

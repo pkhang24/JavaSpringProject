@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.productId} ? 'Edit Product' : 'Add Product'"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:replace="~{layout :: layout(title=${product.productId} ? 'Edit Product' : 'Add Product', content=~{::main})}">
+    <main th:fragment="main">
+        <div class="container">
+            <h2 class="text-center mb-4" th:text="${product.productId} ? 'Edit Product' : 'Add New Product'"></h2>
+            <form th:action="${product.productId} ? @{/admin/products/update} : @{/admin/products}"
+                  th:object="${product}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" th:field="*{productId}" />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" id="title" th:field="*{title}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <input type="text" id="author" th:field="*{author}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN</label>
+                    <input type="text" id="isbn" th:field="*{isbn}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" id="price" th:field="*{price}" step="0.01" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="discountPrice" class="form-label">Discount Price (Optional)</label>
+                    <input type="number" id="discountPrice" th:field="*{discountPrice}" step="0.01" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                    <input type="number" id="stockQuantity" th:field="*{stockQuantity}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" th:field="*{category}" class="form-select" required>
+                        <option value="">Select a category</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.categoryId}"
+                                th:text="${category.categoryName}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="coverImage" class="form-label">Cover Image</label>
+                    <input type="file" id="coverImage" name="coverImage" class="form-control" accept="image/*">
+                    <div th:if="${product.coverImageUrl}">
+                        <small>Current Image: <img th:src="${product.coverImageUrl}" alt="Current Image" style="max-width: 100px;"/></small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" th:field="*{description}" class="form-control" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success" th:text="${product.productId} ? 'Update Product' : 'Save Product'"></button>
+                <a th:href="@{/admin/products}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
